@@ -27,42 +27,95 @@
     </script>
     
     <style>
+        /* CSS Variables to handle fluid transitions between themes */
+        :root {
+            --bg-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --radial-gradient-1: rgba(0, 102, 204, 0.05);
+            --radial-gradient-2: rgba(112, 0, 179, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+            --glass-hover-border: rgba(0, 0, 0, 0.15);
+            --glass-hover-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.1);
+            --capsule-bg: radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.9) 0%, rgba(245, 245, 247, 0.8) 80%);
+            --capsule-border: rgba(0, 0, 0, 0.05);
+            --capsule-inner-shadow: inset 0 20px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .dark {
+            --bg-color: #0b0b0c;
+            --text-color: #f4f4f5;
+            --radial-gradient-1: rgba(0, 102, 204, 0.15);
+            --radial-gradient-2: rgba(112, 0, 179, 0.15);
+            --glass-bg: rgba(20, 20, 23, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4);
+            --glass-hover-border: rgba(255, 255, 255, 0.18);
+            --glass-hover-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.6);
+            --capsule-bg: radial-gradient(circle at 50% 10%, rgba(30, 30, 35, 0.9) 0%, rgba(15, 15, 18, 0.8) 80%);
+            --capsule-border: rgba(255, 255, 255, 0.08);
+            --capsule-inner-shadow: inset 0 20px 40px rgba(255, 255, 255, 0.03);
+        }
+
+        /* Fluid layout transition styles across color properties */
+        body, .glass-panel, .liquid-capsule, h1, h2, h3, h4, p, span, a, button, li, div {
+            transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+                        color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         body {
-            background-color: #f5f5f7;
-            color: #1d1d1f;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 102, 204, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(112, 0, 179, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, var(--radial-gradient-1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, var(--radial-gradient-2) 0%, transparent 40%);
             background-attachment: fixed;
             -webkit-font-smoothing: antialiased;
         }
         
         .glass-panel {
-            background: rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg);
             backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
             border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
         .glass-panel:hover {
-            border-color: rgba(0, 0, 0, 0.15);
-            box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.1);
+            border-color: var(--glass-hover-border);
+            box-shadow: var(--glass-hover-shadow);
         }
 
         .liquid-capsule {
             border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            background: radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.9) 0%, rgba(245, 245, 247, 0.8) 80%);
-            box-shadow: inset 0 20px 40px rgba(255, 255, 255, 0.3), 0 10px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--capsule-border);
+            background: var(--capsule-bg);
+            box-shadow: var(--capsule-inner-shadow), 0 10px 20px rgba(0, 0, 0, 0.05);
         }
     </style>
+    
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.add('light');
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
 </head>
 <body class="px-6 md:px-12 lg:px-24 py-8 selection:bg-appleBlue selection:text-white">
 
-    <div class="fixed top-1/4 left-1/3 w-[350px] h-[350px] bg-appleBlue/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-    <div class="fixed bottom-1/3 right-1/4 w-[400px] h-[400px] bg-applePurple/5 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+    <!-- FLOATING BACKGROUND DECORATION -->
+    <div class="fixed top-1/4 left-1/3 w-[350px] h-[350px] bg-appleBlue/5 dark:bg-appleBlue/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+    <div class="fixed bottom-1/3 right-1/4 w-[400px] h-[400px] bg-applePurple/5 dark:bg-applePurple/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
 
     <header class="flex justify-between items-center max-w-7xl mx-auto mb-16 glass-panel px-8 py-6">
         <div class="flex items-center space-x-3">
@@ -70,9 +123,18 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-appleBlue opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-appleBlue"></span>
             </span>
-            <span class="text-customText font-bold uppercase tracking-widest text-sm">SAPNA KUMARI</span>
+            <span class="text-customText dark:text-zinc-100 font-bold uppercase tracking-widest text-sm">SAPNA KUMARI</span>
         </div>
-        <div class="hidden sm:block text-xs text-zinc-500 font-mono">Dublin, Ireland</div>
+        
+        <div class="flex items-center space-x-6">
+            <div class="hidden sm:block text-xs text-zinc-500 dark:text-zinc-400 font-mono">Dublin, Ireland</div>
+            
+            <!-- THEME TOGGLE BUTTON -->
+            <button id="theme-toggle" class="p-2.5 rounded-full glass-panel hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 flex items-center justify-center cursor-pointer" aria-label="Toggle dark/light theme">
+                <span id="theme-icon-light" class="hidden text-sm">☀️</span>
+                <span id="theme-icon-dark" class="text-sm">🌙</span>
+            </button>
+        </div>
     </header>
 
     <main class="max-w-7xl mx-auto">
@@ -81,17 +143,17 @@
             
             <div class="lg:col-span-6 space-y-8">
                 <span class="text-sm uppercase tracking-widest text-appleBlue font-semibold font-mono block">Graphic & Creative Designer</span>
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-tight text-customText">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-tight text-customText dark:text-zinc-100">
                     CREATING <br><span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-appleBlue to-applePurple">VISUAL STORIES</span>
                 </h1>
-                <p class="text-zinc-600 text-lg leading-relaxed max-w-lg">
+                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed max-w-lg">
                     6+ years of experience as a Graphic / Creative Designer, skilled in creating engagement and brand recognition across B2B, B2C, and Product verticals.
                 </p>
                 <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="mailto:sapna29950@gmail.com" class="inline-flex items-center justify-center bg-zinc-900 hover:bg-black text-white border border-black px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider shadow-lg transition-all duration-300 backdrop-blur-md">
+                    <a href="mailto:sapna29950@gmail.com" class="inline-flex items-center justify-center bg-zinc-900 dark:bg-zinc-100 hover:bg-black dark:hover:bg-white text-white dark:text-zinc-900 border border-black dark:border-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider shadow-lg transition-all duration-300 backdrop-blur-md">
                         Contact Me
                     </a>
-                    <a href="https://www.linkedin.com/in/sapna-kumari-032aa1189" target="_blank" class="inline-flex items-center justify-center bg-transparent hover:bg-zinc-100 text-zinc-900 border border-zinc-300 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider shadow-sm transition-all duration-300 backdrop-blur-md">
+                    <a href="https://www.linkedin.com/in/sapna-kumari-032aa1189" target="_blank" class="inline-flex items-center justify-center bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider shadow-sm transition-all duration-300 backdrop-blur-md">
                         LinkedIn
                     </a>
                 </div>
@@ -100,26 +162,26 @@
             <div class="lg:col-span-5 lg:col-start-8 flex justify-center">
                 <div class="liquid-capsule w-full max-w-[360px] aspect-[4/5] overflow-hidden flex flex-col p-6 relative">
                     <canvas id="designCanvas" class="absolute inset-0 w-full h-full block z-0"></canvas>
-                    <div class="z-10 mt-auto bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-white/50">
-                        <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-mono mb-1">Live Design System</p>
-                        <p class="text-sm font-semibold text-customText font-mono">Creative Motion Study</p>
+                    <div class="z-10 mt-auto bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/50 dark:border-zinc-800/50">
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-mono mb-1">Live Design System</p>
+                        <p class="text-sm font-semibold text-customText dark:text-zinc-100 font-mono">Creative Motion Study</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="mb-16">
-            <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 font-mono mb-12 border-b border-zinc-200 pb-4">Professional Experience</h3>
+            <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-mono mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-4">Professional Experience</h3>
             <div class="space-y-8">
                 <!-- Design Waale -->
                 <div class="glass-panel p-8">
                     <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                         <div>
-                            <h4 class="text-2xl font-bold text-customText">Co-Founder, Design Waale</h4>
+                            <h4 class="text-2xl font-bold text-customText dark:text-zinc-100">Co-Founder, Design Waale</h4>
                             <p class="text-sm text-appleBlue font-mono mt-2">10/2024 – Present</p>
                         </div>
                     </div>
-                    <ul class="space-y-4 text-zinc-700 text-sm leading-relaxed list-disc list-inside">
+                    <ul class="space-y-4 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed list-disc list-inside">
                         <li>Co-founded Designwaale, a multidisciplinary design agency, and successfully led engagements with 15+ clients in the last 6 months, spanning startups, SMEs, and global brands.</li>
                         <li>Spearheaded end-to-end design solutions across branding, UI/UX, website design, landing pages, and digital content - delivering consistent, high-quality results tailored to diverse industries.</li>
                         <li>Played a key role in client acquisition and relationship management, consistently converting leads into long-term clients through strategic communication and consultative selling.</li>
@@ -133,11 +195,11 @@
                 <div class="glass-panel p-8">
                     <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                         <div>
-                            <h4 class="text-2xl font-bold text-customText">Senior Graphic Designer, Refyne India</h4>
+                            <h4 class="text-2xl font-bold text-customText dark:text-zinc-100">Senior Graphic Designer, Refyne India</h4>
                             <p class="text-sm text-appleBlue font-mono mt-2">12/2022 – 04/2024</p>
                         </div>
                     </div>
-                    <ul class="space-y-4 text-zinc-700 text-sm leading-relaxed list-disc list-inside">
+                    <ul class="space-y-4 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed list-disc list-inside">
                         <li>Mentored and Managed a team of Junior designers, fostering a collaborative, friendly and innovative design culture.</li>
                         <li>Built scalable design and efficient hand-offs between team members, including creating templates and automations to streamline workflows.</li>
                         <li>Incorporated latest design innovations and creative technology in the design creatives to bring fresh perspective with adherence to the brand guidelines.</li>
@@ -150,11 +212,11 @@
                 <div class="glass-panel p-8">
                     <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                         <div>
-                            <h4 class="text-2xl font-bold text-customText">Graphic Designer, Unacademy</h4>
+                            <h4 class="text-2xl font-bold text-customText dark:text-zinc-100">Graphic Designer, Unacademy</h4>
                             <p class="text-sm text-appleBlue font-mono mt-2">12/2020 – 11/2022</p>
                         </div>
                     </div>
-                    <ul class="space-y-4 text-zinc-700 text-sm leading-relaxed list-disc list-inside">
+                    <ul class="space-y-4 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed list-disc list-inside">
                         <li>Ideated and designed marketing mailers, Ads and Push notifications to effectively engage the potential customers and increase the growth of the company.</li>
                         <li>Collaborated with marketing team to develop creative concepts for product launches, promotions, and seasonal campaigns.</li>
                         <li>Maintained and evolved brand identity, ensuring consistency across all brand touchpoints.</li>
@@ -167,11 +229,11 @@
                 <div class="glass-panel p-8">
                     <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                         <div>
-                            <h4 class="text-2xl font-bold text-customText">Junior Graphic Designer, Anglerfox Pvt Ltd</h4>
+                            <h4 class="text-2xl font-bold text-customText dark:text-zinc-100">Junior Graphic Designer, Anglerfox Pvt Ltd</h4>
                             <p class="text-sm text-appleBlue font-mono mt-2">02/2018 – 11/2020</p>
                         </div>
                     </div>
-                    <ul class="space-y-4 text-zinc-700 text-sm leading-relaxed list-disc list-inside">
+                    <ul class="space-y-4 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed list-disc list-inside">
                         <li>Worked on various designs both for marketing and website, served as the bridge between creative concepts and client expectations, effectively communicating ideas and strategies.</li>
                         <li>Developed visually stunning and user-friendly websites that enhance the online experience for our customers.</li>
                         <li>Developed brand guidelines and assets that reflect brand's personality, values, and positioning.</li>
@@ -182,29 +244,30 @@
 
         <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <div class="glass-panel p-8">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 font-mono mb-8 border-b border-zinc-200 pb-4">Awards</h3>
-                <ul class="space-y-4 text-zinc-800 text-sm">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-mono mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-4">Awards</h3>
+                <ul class="space-y-4 text-zinc-800 dark:text-zinc-200 text-sm">
                     <li><span class="text-applePurple font-bold block text-base mb-1">Collaboration Ninja Award (2024, 2023)</span> - Refyne India</li>
                     <li><span class="text-applePurple font-bold block text-base mb-1">The Super Squad Award (2024)</span> - Refyne India</li>
                 </ul>
             </div>
+            
             <div class="glass-panel p-8">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 font-mono mb-8 border-b border-zinc-200 pb-4">Portfolio Links</h3>
+                <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-mono mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-4">Portfolio Links</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a href="https://dribbble.com/designwaale" class="bg-zinc-50 hover:bg-appleBlue/10 border border-zinc-200 p-4 rounded-xl flex items-center justify-between transition-all group">
-                        <span class="text-sm text-customText font-medium">Dribbble (Designwaale)</span>
+                    <a href="https://dribbble.com/designwaale" class="bg-zinc-50 dark:bg-zinc-900/50 hover:bg-appleBlue/10 dark:hover:bg-appleBlue/20 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex items-center justify-between transition-all group">
+                        <span class="text-sm text-customText dark:text-zinc-100 font-medium">Dribbble (Designwaale)</span>
                         <span class="text-appleBlue text-xs opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
                     </a>
-                    <a href="https://dribbble.com/_sapna" class="bg-zinc-50 hover:bg-appleBlue/10 border border-zinc-200 p-4 rounded-xl flex items-center justify-between transition-all group">
-                        <span class="text-sm text-customText font-medium">Dribbble (_sapna)</span>
+                    <a href="https://dribbble.com/_sapna" class="bg-zinc-50 dark:bg-zinc-900/50 hover:bg-appleBlue/10 dark:hover:bg-appleBlue/20 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex items-center justify-between transition-all group">
+                        <span class="text-sm text-customText dark:text-zinc-100 font-medium">Dribbble (_sapna)</span>
                         <span class="text-appleBlue text-xs opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
                     </a>
-                    <a href="https://www.behance.net/_sapna" class="bg-zinc-50 hover:bg-appleBlue/10 border border-zinc-200 p-4 rounded-xl flex items-center justify-between transition-all group">
-                        <span class="text-sm text-customText font-medium">Behance</span>
+                    <a href="https://www.behance.net/_sapna" class="bg-zinc-50 dark:bg-zinc-900/50 hover:bg-appleBlue/10 dark:hover:bg-appleBlue/20 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex items-center justify-between transition-all group">
+                        <span class="text-sm text-customText dark:text-zinc-100 font-medium">Behance</span>
                         <span class="text-appleBlue text-xs opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
                     </a>
-                    <a href="https://www.instagram.com/sappy_illustrations/" class="bg-zinc-50 hover:bg-appleBlue/10 border border-zinc-200 p-4 rounded-xl flex items-center justify-between transition-all group">
-                        <span class="text-sm text-customText font-medium">Instagram</span>
+                    <a href="https://www.instagram.com/sappy_illustrations/" class="bg-zinc-50 dark:bg-zinc-900/50 hover:bg-appleBlue/10 dark:hover:bg-appleBlue/20 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl flex items-center justify-between transition-all group">
+                        <span class="text-sm text-customText dark:text-zinc-100 font-medium">Instagram</span>
                         <span class="text-appleBlue text-xs opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
                     </a>
                 </div>
@@ -212,43 +275,43 @@
         </section>
 
         <section class="mb-16">
-             <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 font-mono mb-12 border-b border-zinc-200 pb-4">Technical Skills</h3>
+             <h3 class="text-sm font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-mono mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-4">Technical Skills</h3>
              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="p-8 glass-panel">
                     <p class="text-xs text-appleBlue uppercase font-mono tracking-wider mb-4">Design Tools</p>
-                    <p class="text-sm text-zinc-800 font-medium leading-relaxed">Photoshop, Illustrator, After Effects, Figma</p>
+                    <p class="text-sm text-zinc-800 dark:text-zinc-200 font-medium leading-relaxed">Photoshop, Illustrator, After Effects, Figma</p>
                 </div>
                 <div class="p-8 glass-panel">
                     <p class="text-xs text-appleBlue uppercase font-mono tracking-wider mb-4">Capabilities</p>
-                    <p class="text-sm text-zinc-800 font-medium leading-relaxed">Branding, UI/UX, Illustration, Web Design</p>
+                    <p class="text-sm text-zinc-800 dark:text-zinc-200 font-medium leading-relaxed">Branding, UI/UX, Illustration, Web Design</p>
                 </div>
                 <div class="p-8 glass-panel">
                     <p class="text-xs text-appleBlue uppercase font-mono tracking-wider mb-4">Methodology</p>
-                    <p class="text-sm text-zinc-800 font-medium leading-relaxed">Design Thinking, Digital Marketing, Collaboration</p>
+                    <p class="text-sm text-zinc-800 dark:text-zinc-200 font-medium leading-relaxed">Design Thinking, Digital Marketing, Collaboration</p>
                 </div>
                 <div class="p-8 glass-panel">
                     <p class="text-xs text-appleBlue uppercase font-mono tracking-wider mb-4">Soft Skills</p>
-                    <p class="text-sm text-zinc-800 font-medium leading-relaxed">Communication, Team Player, Time Management</p>
+                    <p class="text-sm text-zinc-800 dark:text-zinc-200 font-medium leading-relaxed">Communication, Team Player, Time Management</p>
                 </div>
             </div>
         </section>
 
         <footer class="relative mt-16 py-8 px-6">
-            <div class="max-w-7xl mx-auto glass-panel p-16 text-center border-zinc-200 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto glass-panel p-16 text-center border-zinc-200 dark:border-zinc-800 relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-br from-appleBlue/10 via-transparent to-applePurple/10 opacity-50 group-hover:opacity-80 transition-opacity duration-700"></div>
                 <div class="absolute -top-24 -left-24 w-64 h-64 bg-appleBlue/20 rounded-full blur-[100px] animate-pulse"></div>
                 <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-applePurple/20 rounded-full blur-[100px] animate-pulse" style="animation-delay: 2s;"></div>
                 
                 <div class="relative z-10">
-                    <h2 class="text-4xl md:text-6xl font-light text-customText mb-10 tracking-tight leading-tight">
+                    <h2 class="text-4xl md:text-6xl font-light text-customText dark:text-zinc-100 mb-10 tracking-tight leading-tight">
                         Let’s create something<br><span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-appleBlue to-applePurple">extraordinary together.</span>
                     </h2>
-                    <a href="mailto:sapna29950@gmail.com" class="inline-flex items-center px-10 py-4 bg-zinc-900 hover:bg-black text-white rounded-full text-sm font-semibold uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-appleBlue/20">
+                    <a href="mailto:sapna29950@gmail.com" class="inline-flex items-center px-10 py-4 bg-zinc-900 dark:bg-zinc-100 hover:bg-black dark:hover:bg-white text-white dark:text-zinc-900 rounded-full text-sm font-semibold uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-appleBlue/20">
                         Start a conversation
                     </a>
                 </div>
             </div>
-            <div class="max-w-7xl mx-auto mt-12 text-center text-zinc-400 text-[10px] font-mono uppercase tracking-widest opacity-100">
+            <div class="max-w-7xl mx-auto mt-12 text-center text-zinc-400 dark:text-zinc-500 text-[10px] font-mono uppercase tracking-widest opacity-100">
                 &copy; 2026 Sapna Kumari. Designed with precision.
             </div>
         </footer>
@@ -256,6 +319,43 @@
     </main>
 
     <script>
+        // --- Dark/Light Mode Theme Toggle Logic ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const iconLight = document.getElementById('theme-icon-light');
+        const iconDark = document.getElementById('theme-icon-dark');
+        
+        function updateToggleUI(isDark) {
+            if (isDark) {
+                iconLight.classList.remove('hidden');
+                iconDark.classList.add('hidden');
+            } else {
+                iconLight.classList.add('hidden');
+                iconDark.classList.remove('hidden');
+            }
+        }
+
+        // Initialize display state based on HTML class set by head script
+        const initialIsDark = document.documentElement.classList.contains('dark');
+        updateToggleUI(initialIsDark);
+
+        // Click event listener with fluid variables update
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            const willBeDark = !isDark;
+            
+            if (willBeDark) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            }
+            updateToggleUI(willBeDark);
+        });
+
+        // --- Live Design System Canvas Code ---
         const canvas = document.getElementById('designCanvas');
         const ctx = canvas.getContext('2d');
         let elements = [];
@@ -309,7 +409,12 @@
             });
             requestAnimationFrame(animate);
         }
-        animate();
+
+        // Start animation after window has fully loaded
+        window.onload = function() {
+            resize();
+            animate();
+        };
     </script>
 </body>
 </html>
